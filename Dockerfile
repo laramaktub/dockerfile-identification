@@ -39,5 +39,15 @@ RUN wget ftp://ftp.ebi.ac.uk/pub/software/unix/iprscan/5/5RC1/interproscan-5-64-
 RUN tar -pxvzf interproscan-5-*-bit-RC1.tar.gz
 ENV PATH=/opt/interproscan-5-RC1/:$PATH
 
+## Including OneData client
+
+RUN apt-add-repository ppa:ansible/ansible
+RUN apt-get update && \
+    apt-get install -y ansible && \
+    rm -rf /var/lib/apt/lists/* 
+RUN ansible-galaxy install indigo-dc.oneclient && \
+    ansible-playbook /etc/ansible/roles/indigo-dc.oneclient/tests/test.yml
+
+
 CMD /bin/bash -l
 
